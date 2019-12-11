@@ -7,22 +7,29 @@ namespace AdventOfCode2019
 {
     public class Day3
     {
-        private readonly List<Coordinate> _doesItWork;
+        private readonly List<Coordinate> _wireBoard;
 
-        public Day3()
+        private Day3(List<Coordinate> wireBoard)
+        {
+            _wireBoard = wireBoard;
+        }
+
+        public static Day3 Create()
         {
             var file = Path.Combine(Environment.CurrentDirectory, "Inputs", "Day3.txt");
             var lines = File.ReadAllLines(file);
             var wireOne = lines[0].Split(",", StringSplitOptions.RemoveEmptyEntries);
             var wireTwo = lines[1].Split(",", StringSplitOptions.RemoveEmptyEntries);
 
-            _doesItWork = new List<Coordinate>
+            var wireBoard = new List<Coordinate>
             {
                 new Coordinate()
             };
 
-            AddWireCoordinates(wireOne, true);
-            AddWireCoordinates(wireTwo, false);
+            AddWireCoordinates(wireBoard, wireOne, true);
+            AddWireCoordinates(wireBoard, wireTwo, false);
+
+            return new Day3(wireBoard);
         }
 
         public int ExecutePart1()
@@ -30,7 +37,7 @@ namespace AdventOfCode2019
             var firstIteration = true;
             var bestManhattanDistance = 0;
 
-            foreach (var c in _doesItWork.Where(c => c.WireOne && c.WireTwo && c.X != 0 && c.Y != 0))
+            foreach (var c in _wireBoard.Where(c => c.WireOne && c.WireTwo && c.X != 0 && c.Y != 0))
             {
                 var currentManhattanDistance = CalculateManhattanDistance(0, c.X, 0, c.Y);
                 if (firstIteration)
@@ -59,9 +66,9 @@ namespace AdventOfCode2019
             return Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
         }
 
-        private void AddWireCoordinates(string[] wireCoordinates, bool wireOne)
+        private static void AddWireCoordinates(List<Coordinate> wireBoard, string[] wireCoordinates, bool wireOne)
         {
-            var currentCoordinate = _doesItWork.First();
+            var currentCoordinate = wireBoard.First();
             foreach (var wireOneCoordinate in wireCoordinates)
             {
                 var numberOfMovements = ParseNumberOfMovements(wireOneCoordinate);
@@ -75,7 +82,7 @@ namespace AdventOfCode2019
                     while (offset != 0)
                     {
                         var newPathCoordinate = new Coordinate(--currentCoordinateX, newCoordinate.Y, wireOne, !wireOne);
-                        AddOrUpdate(newPathCoordinate, wireOne);
+                        AddOrUpdate(wireBoard, newPathCoordinate, wireOne);
                         offset = currentCoordinateX - currentCoordinate.X;
                     }
                 }
@@ -87,7 +94,7 @@ namespace AdventOfCode2019
                     while (offset != 0)
                     {
                         var newPathCoordinate = new Coordinate(++currentCoordinateX, newCoordinate.Y, wireOne, !wireOne);
-                        AddOrUpdate(newPathCoordinate, wireOne);
+                        AddOrUpdate(wireBoard, newPathCoordinate, wireOne);
                         offset = currentCoordinateX - currentCoordinate.X;
                     }
                 }
@@ -99,7 +106,7 @@ namespace AdventOfCode2019
                     while (offset != 0)
                     {
                         var newPathCoordinate = new Coordinate(newCoordinate.X, --newCoordinateY, wireOne, !wireOne);
-                        AddOrUpdate(newPathCoordinate, wireOne);
+                        AddOrUpdate(wireBoard, newPathCoordinate, wireOne);
                         offset = newCoordinateY - currentCoordinate.Y;
                     }
                 }
@@ -111,7 +118,7 @@ namespace AdventOfCode2019
                     while (offset != 0)
                     {
                         var newPathCoordinate = new Coordinate(newCoordinate.X, ++newCoordinateY, wireOne, !wireOne);
-                        AddOrUpdate(newPathCoordinate, wireOne);
+                        AddOrUpdate(wireBoard, newPathCoordinate, wireOne);
                         offset = newCoordinateY - currentCoordinate.Y;
                     }
                 }
@@ -120,14 +127,14 @@ namespace AdventOfCode2019
                     throw new ArgumentException($"Invalid coordinate {wireOneCoordinate}.");
                 }
 
-                AddOrUpdate(newCoordinate, wireOne);
+                AddOrUpdate(wireBoard, newCoordinate, wireOne);
                 currentCoordinate = newCoordinate;
             }
         }
 
-        private void AddOrUpdate(Coordinate coordinate, bool wireOne)
+        private static void AddOrUpdate(List<Coordinate> wireBoard, Coordinate coordinate, bool wireOne)
         {
-            var existingCoordinate = _doesItWork.FirstOrDefault(c => c.X == coordinate.X && c.Y == coordinate.Y);
+            var existingCoordinate = wireBoard.FirstOrDefault(c => c.X == coordinate.X && c.Y == coordinate.Y);
             if (existingCoordinate != null)
             {
                 if (wireOne)
@@ -141,7 +148,7 @@ namespace AdventOfCode2019
             }
             else
             {
-                _doesItWork.Add(coordinate);
+                wireBoard.Add(coordinate);
             }
         }
 

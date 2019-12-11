@@ -9,11 +9,18 @@ namespace AdventOfCode2019
     {
         private readonly List<double> _modulesMass;
 
-        public Day1()
+        private Day1(List<double> modulesMass)
+        {
+            _modulesMass = modulesMass;
+        }
+
+        public static Day1 Create()
         {
             var lines = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "Inputs", "Day1.txt"));
-            _modulesMass = new List<double>(lines.Length);
-            _modulesMass.AddRange(lines.Select(double.Parse));
+            var modulesMass = new List<double>(lines.Length);
+            modulesMass.AddRange(lines.Select(double.Parse));
+
+            return new Day1(modulesMass);
         }
 
         public int ExecutePart1() => _modulesMass.Sum(CalculateMassFuel);

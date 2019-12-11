@@ -9,9 +9,14 @@ namespace AdventOfCode2019
     {
         private List<int> _intCodes;
 
-        public Day2()
+        private Day2(List<int> intCodes)
         {
-            LoadIntCodes();
+            _intCodes = intCodes;
+        }
+
+        public static Day2 Create()
+        {
+            return new Day2(GetIntCodes());
         }
 
         public int ExecutePart1()
@@ -34,7 +39,7 @@ namespace AdventOfCode2019
                 {
                     var verb = j;
 
-                    LoadIntCodes(); // Reset
+                    _intCodes = GetIntCodes(); // Reset
                     _intCodes[1] = noun;
                     _intCodes[2] = verb;
                     // Console.WriteLine($"Trying with noun {noun} and verb {verb}");
@@ -59,7 +64,7 @@ namespace AdventOfCode2019
             return "Error: Couldn't find the answer";
         }
 
-        private void LoadIntCodes()
+        private static List<int> GetIntCodes()
         {
             var file = Path.Combine(Environment.CurrentDirectory, "Inputs", "Day2.txt");
             var values = File.ReadAllLines(file)
@@ -71,8 +76,10 @@ namespace AdventOfCode2019
                 throw new ArgumentNullException($"Couldn't read the values from the input file {file}");
             }
 
-            _intCodes = new List<int>(values.Length);
-            _intCodes.AddRange(values.Select(int.Parse));
+            var intCodes = new List<int>(values.Length);
+            intCodes.AddRange(values.Select(int.Parse));
+
+            return intCodes;
         }
 
         private void ExecuteProgram()
