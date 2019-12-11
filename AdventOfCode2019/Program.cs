@@ -8,7 +8,7 @@ namespace AdventOfCode2019
         {
             var day1 = new Day1();
             Console.WriteLine($"Day 1 Part 1: {day1.ExecutePart1()}");
-            Console.WriteLine($"Day 1 Part 1: {day1.ExecutePart2()}");
+            Console.WriteLine($"Day 1 Part 2: {day1.ExecutePart2()}");
 
             var day2 = new Day2();
             Console.WriteLine($"Day 2 Part 1: {day2.ExecutePart1()}");

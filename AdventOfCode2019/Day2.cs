@@ -7,9 +7,59 @@ namespace AdventOfCode2019
 {
     public class Day2
     {
-        private readonly List<int> _intCodes;
+        private List<int> _intCodes;
 
         public Day2()
+        {
+            LoadIntCodes();
+        }
+
+        public int ExecutePart1()
+        {
+            _intCodes[1] = 12;
+            _intCodes[2] = 2;
+
+            ExecuteProgram();
+
+            return _intCodes[0];
+        }
+
+        public string ExecutePart2()
+        {
+            for (var i = 0; i < 100; i++)
+            {
+                var noun = i;
+
+                for (var j = 0; j < 100; j++)
+                {
+                    var verb = j;
+
+                    LoadIntCodes(); // Reset
+                    _intCodes[1] = noun;
+                    _intCodes[2] = verb;
+                    // Console.WriteLine($"Trying with noun {noun} and verb {verb}");
+
+                    try
+                    {
+                        ExecuteProgram();
+                        // Console.WriteLine($"Value {_intCodes[0]}");
+                    }
+                    catch
+                    {
+                        // Ignore
+                    }
+
+                    if (_intCodes[0] == 19690720)
+                    {
+                        return $"{noun}{verb}";
+                    }
+                }
+            }
+
+            return "Error: Couldn't find the answer";
+        }
+
+        private void LoadIntCodes()
         {
             var file = Path.Combine(Environment.CurrentDirectory, "Inputs", "Day2.txt");
             var values = File.ReadAllLines(file)
@@ -25,11 +75,8 @@ namespace AdventOfCode2019
             _intCodes.AddRange(values.Select(int.Parse));
         }
 
-        public int ExecutePart1()
+        private void ExecuteProgram()
         {
-            _intCodes[1] = 12;
-            _intCodes[2] = 2;
-
             for (var position = 0; position < _intCodes.Count;)
             {
                 var intCode = _intCodes[position];
@@ -53,15 +100,6 @@ namespace AdventOfCode2019
                     throw new Exception($"Something went wrong. Incorrect int code {intCode}");
                 }
             }
-
-            return _intCodes[0];
-        }
-
-        public int ExecutePart2()
-        {
-            // output 
-
-            return 0;
         }
 
         private void Sum(int positionOne, int positionTwo, int positionResult)
