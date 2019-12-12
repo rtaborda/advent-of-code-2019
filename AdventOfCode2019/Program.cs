@@ -16,6 +16,7 @@ namespace AdventOfCode2019
 
             var day3 = Day3.Create();
             Console.WriteLine($"Day 3 Part 1: {day3.ExecutePart1()}");
+            Console.WriteLine($"Day 3 Part 2: {day3.ExecutePart2()}");
 
             Console.ReadKey();
         }
