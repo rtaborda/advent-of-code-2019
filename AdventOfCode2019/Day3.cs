@@ -7,9 +7,9 @@ namespace AdventOfCode2019
 {
     public class Day3
     {
-        private readonly List<Coordinate> _wireBoard;
+        private readonly Dictionary<string, Coordinate> _wireBoard;
 
-        private Day3(List<Coordinate> wireBoard)
+        private Day3(Dictionary<string, Coordinate> wireBoard)
         {
             _wireBoard = wireBoard;
         }
@@ -21,9 +21,9 @@ namespace AdventOfCode2019
             var wireOne = lines[0].Split(",", StringSplitOptions.RemoveEmptyEntries);
             var wireTwo = lines[1].Split(",", StringSplitOptions.RemoveEmptyEntries);
 
-            var wireBoard = new List<Coordinate>
+            var wireBoard = new Dictionary<string, Coordinate>(500000)
             {
-                new Coordinate()
+                { "X0Y0", new Coordinate() }
             };
 
             AddWireCoordinates(wireBoard, wireOne, true);
@@ -36,8 +36,9 @@ namespace AdventOfCode2019
         {
             var firstIteration = true;
             var bestManhattanDistance = 0;
+            var crossingPoints = _wireBoard.Values.Where(c => c.WireOne && c.WireTwo && c.X != 0 && c.Y != 0);
 
-            foreach (var c in _wireBoard.Where(c => c.WireOne && c.WireTwo && c.X != 0 && c.Y != 0))
+            foreach (var c in crossingPoints)
             {
                 var currentManhattanDistance = CalculateManhattanDistance(0, c.X, 0, c.Y);
                 if (firstIteration)
@@ -66,9 +67,9 @@ namespace AdventOfCode2019
             return Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
         }
 
-        private static void AddWireCoordinates(List<Coordinate> wireBoard, string[] wireCoordinates, bool wireOne)
+        private static void AddWireCoordinates(Dictionary<string, Coordinate> wireBoard, string[] wireCoordinates, bool wireOne)
         {
-            var currentCoordinate = wireBoard.First();
+            var currentCoordinate = wireBoard.First().Value;
             foreach (var wireOneCoordinate in wireCoordinates)
             {
                 var numberOfMovements = ParseNumberOfMovements(wireOneCoordinate);
@@ -132,23 +133,22 @@ namespace AdventOfCode2019
             }
         }
 
-        private static void AddOrUpdate(List<Coordinate> wireBoard, Coordinate coordinate, bool wireOne)
+        private static void AddOrUpdate(Dictionary<string, Coordinate> wireBoard, Coordinate coordinate, bool wireOne)
         {
-            var existingCoordinate = wireBoard.FirstOrDefault(c => c.X == coordinate.X && c.Y == coordinate.Y);
-            if (existingCoordinate != null)
+            if (wireBoard.ContainsKey(coordinate.Key))
             {
                 if (wireOne)
                 {
-                    existingCoordinate.WireOne = true;
+                    wireBoard[coordinate.Key].WireOne = true;
                 }
                 else
                 {
-                    existingCoordinate.WireTwo = true;
+                    wireBoard[coordinate.Key].WireTwo = true;
                 }
             }
             else
             {
-                wireBoard.Add(coordinate);
+                wireBoard.Add(coordinate.Key, coordinate);
             }
         }
 
@@ -161,6 +161,8 @@ namespace AdventOfCode2019
             public bool WireOne { get; set; }
 
             public bool WireTwo { get; set; }
+
+            public string Key => $"X{X}Y{Y}";
 
             public Coordinate()
             {

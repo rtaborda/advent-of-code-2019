@@ -10,3 +10,5 @@ C:\Development\Lab\advent-of-code\AdventOfCode2019\AdventOfCode2019\obj\Debug\ne
 C:\Development\Lab\advent-of-code\AdventOfCode2019\AdventOfCode2019\obj\Debug\netcoreapp3.1\AdventOfCode2019.dll
 C:\Development\Lab\advent-of-code\AdventOfCode2019\AdventOfCode2019\obj\Debug\netcoreapp3.1\AdventOfCode2019.pdb
 C:\Development\Lab\advent-of-code\AdventOfCode2019\AdventOfCode2019\bin\Debug\netcoreapp3.1\Inputs\Day1.txt
+C:\Development\Lab\advent-of-code\AdventOfCode2019\AdventOfCode2019\bin\Debug\netcoreapp3.1\Inputs\Day2.txt
+C:\Development\Lab\advent-of-code\AdventOfCode2019\AdventOfCode2019\bin\Debug\netcoreapp3.1\Inputs\Day3.txt
